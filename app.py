@@ -15,182 +15,362 @@ st.set_page_config(
 )
 
 # ========================
-# CSS
+# Theme state
 # ========================
-st.markdown("""
-<style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+def toggle_theme():
+    st.session_state.theme = "dark" if st.session_state.theme == "light" else "light"
 
-:root {
-  --bg:        #F4EFE6;
-  --surface:   #FDFAF4;
-  --border:    #DDD4C0;
-  --accent:    #7C6A52;
-  --accent2:   #A08060;
-  --ink:       #1E1712;
-  --ink2:      #4A3F32;
-  --ink3:      #8B7B66;
-  --pos:       #8C3A35;
-  --neg:       #3D6E55;
-  --serif:     'DM Serif Display', Georgia, serif;
-  --sans:      'DM Sans', system-ui, sans-serif;
-}
+# ========================
+# CSS based on theme
+# ========================
+if st.session_state.theme == "light":
+    theme_css = """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
 
-html, body, [class*="css"], .stApp {
-  background-color: var(--bg) !important;
-  font-family: var(--sans) !important;
-  color: var(--ink) !important;
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-#MainMenu, footer, header { visibility: hidden; }
-.block-container {
-  padding: 1.5rem 2rem 2rem !important;
-  max-width: 1200px !important;
-  margin: 0 auto !important;
-}
+    :root {
+      --bg:        #F4EFE6;
+      --surface:   #FDFAF4;
+      --border:    #DDD4C0;
+      --accent:    #7C6A52;
+      --accent2:   #A08060;
+      --ink:       #1E1712;
+      --ink2:      #4A3F32;
+      --ink3:      #8B7B66;
+      --pos:       #8C3A35;
+      --neg:       #3D6E55;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+    }
 
-/* HEADER */
-.app-masthead {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 1.5rem 1.8rem;
-  background: var(--ink);
-  border-radius: 6px;
-  margin-bottom: 1.8rem;
-}
-.masthead-left { z-index: 1; }
-.masthead-eyebrow {
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--accent2);
-  margin-bottom: 0.4rem;
-}
-.masthead-title {
-  font-family: var(--serif);
-  font-size: 1.8rem;
-  font-weight: 400;
-  color: #FAF6EF;
-  line-height: 1.1;
-}
-.masthead-title em { font-style: italic; color: var(--accent2); }
-.masthead-right { text-align: right; }
-.masthead-sub {
-  font-family: var(--sans);
-  font-size: 0.7rem;
-  color: rgba(250,246,239,0.55);
-  font-weight: 300;
-  max-width: 250px;
-}
+    html, body, [class*="css"], .stApp {
+      background-color: var(--bg) !important;
+      font-family: var(--sans) !important;
+      color: var(--ink) !important;
+    }
+    #MainMenu, footer, header { visibility: hidden; }
+    .block-container {
+      padding: 1.5rem 2rem 2rem !important;
+      max-width: 1200px !important;
+      margin: 0 auto !important;
+    }
+    .app-masthead {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 1.5rem 1.8rem;
+      background: var(--ink);
+      border-radius: 6px;
+      margin-bottom: 1.8rem;
+    }
+    .masthead-left { z-index: 1; }
+    .masthead-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.4rem;
+    }
+    .masthead-title {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: #FAF6EF;
+      line-height: 1.1;
+    }
+    .masthead-title em { font-style: italic; color: var(--accent2); }
+    .masthead-right { text-align: right; }
+    .masthead-sub {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: rgba(250,246,239,0.55);
+      font-weight: 300;
+      max-width: 250px;
+    }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid rgba(250,246,239,0.3);
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-left: 1rem;
+    }
+    .sec-label {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    div[data-testid="stSlider"] > label,
+    div[data-testid="stSelectbox"] > label {
+      font-family: var(--sans) !important;
+      font-size: 0.72rem !important;
+      font-weight: 500 !important;
+      color: var(--ink2) !important;
+      margin-bottom: 0.2rem !important;
+    }
+    div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
+      color: var(--accent) !important;
+    }
+    .stSelectbox > div > div {
+      border-color: var(--border) !important;
+      border-radius: 3px !important;
+      background: var(--surface) !important;
+      font-family: var(--sans) !important;
+      font-size: 0.78rem !important;
+    }
+    .stButton > button {
+      font-family: var(--sans) !important;
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.12em !important;
+      text-transform: uppercase !important;
+      background: var(--ink) !important;
+      color: #FAF6EF !important;
+      border: none !important;
+      border-radius: 3px !important;
+      padding: 0.5rem 1.2rem !important;
+      width: 100% !important;
+      transition: 0.2s;
+    }
+    .stButton > button:hover {
+      background: var(--accent) !important;
+    }
+    .result-prob {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .prob-number {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .factor-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .factor-name { flex: 2; font-size: 0.75rem; font-weight: 500; color: var(--ink2); }
+    .factor-bar { flex: 3; height: 4px; background: #EDE6D8; border-radius: 2px; overflow: hidden; margin: 0 0.8rem; }
+    .factor-bar-fill { height: 100%; border-radius: 2px; }
+    .factor-pct { width: 40px; text-align: right; font-size: 0.7rem; font-weight: 600; }
+    .factor-dir { width: 22px; text-align: center; font-weight: 700; font-size: 0.7rem; }
+    .pos-fill { background: var(--pos); }
+    .neg-fill { background: var(--neg); }
+    .pos-dir { color: var(--pos); }
+    .neg-dir { color: var(--neg); }
+    .legend {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.6rem;
+      padding-top: 0.4rem;
+      font-size: 0.62rem;
+      color: var(--ink3);
+      border-top: 1px solid var(--border);
+    }
+    .legend-dot { width: 6px; height: 6px; border-radius: 1px; display: inline-block; margin-right: 0.3rem; }
+    </style>
+    """
+else:
+    theme_css = """
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
 
-/* SECTION LABEL */
-.sec-label {
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--ink3);
-  margin-bottom: 0.8rem;
-  padding-bottom: 0.4rem;
-  border-bottom: 1px solid var(--border);
-}
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-/* SLIDER & SELECTBOX */
-div[data-testid="stSlider"] > label,
-div[data-testid="stSelectbox"] > label {
-  font-family: var(--sans) !important;
-  font-size: 0.72rem !important;
-  font-weight: 500 !important;
-  color: var(--ink2) !important;
-  margin-bottom: 0.2rem !important;
-}
-div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
-  color: var(--accent) !important;
-}
-.stSelectbox > div > div {
-  border-color: var(--border) !important;
-  border-radius: 3px !important;
-  background: var(--surface) !important;
-  font-family: var(--sans) !important;
-  font-size: 0.78rem !important;
-}
+    :root {
+      --bg:        #1A1A1A;
+      --surface:   #2A2A2A;
+      --border:    #3D3D3D;
+      --accent:    #A08060;
+      --accent2:   #C0A080;
+      --ink:       #F0F0F0;
+      --ink2:      #D0D0D0;
+      --ink3:      #A0A0A0;
+      --pos:       #D97A5C;
+      --neg:       #5C9E7A;
+      --serif:     'DM Serif Display', Georgia, serif;
+      --sans:      'DM Sans', system-ui, sans-serif;
+    }
 
-/* BUTTON */
-.stButton > button {
-  font-family: var(--sans) !important;
-  font-size: 0.72rem !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.12em !important;
-  text-transform: uppercase !important;
-  background: var(--ink) !important;
-  color: #FAF6EF !important;
-  border: none !important;
-  border-radius: 3px !important;
-  padding: 0.5rem 1.2rem !important;
-  width: 100% !important;
-  transition: 0.2s;
-}
-.stButton > button:hover {
-  background: var(--accent) !important;
-}
+    html, body, [class*="css"], .stApp {
+      background-color: var(--bg) !important;
+      font-family: var(--sans) !important;
+      color: var(--ink) !important;
+    }
+    #MainMenu, footer, header { visibility: hidden; }
+    .block-container {
+      padding: 1.5rem 2rem 2rem !important;
+      max-width: 1200px !important;
+      margin: 0 auto !important;
+    }
+    .app-masthead {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 1.5rem 1.8rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      margin-bottom: 1.8rem;
+    }
+    .masthead-eyebrow {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.4rem;
+    }
+    .masthead-title {
+      font-family: var(--serif);
+      font-size: 1.8rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+    .masthead-title em { font-style: italic; color: var(--accent2); }
+    .masthead-sub {
+      font-family: var(--sans);
+      font-size: 0.7rem;
+      color: var(--ink3);
+      font-weight: 300;
+      max-width: 250px;
+    }
+    .theme-toggle {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-left: 1rem;
+      color: var(--ink);
+    }
+    .sec-label {
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink3);
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    div[data-testid="stSlider"] > label,
+    div[data-testid="stSelectbox"] > label {
+      font-family: var(--sans) !important;
+      font-size: 0.72rem !important;
+      font-weight: 500 !important;
+      color: var(--ink2) !important;
+      margin-bottom: 0.2rem !important;
+    }
+    div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
+      color: var(--accent) !important;
+    }
+    .stSelectbox > div > div {
+      border-color: var(--border) !important;
+      border-radius: 3px !important;
+      background: var(--surface) !important;
+      font-family: var(--sans) !important;
+      font-size: 0.78rem !important;
+      color: var(--ink) !important;
+    }
+    .stButton > button {
+      font-family: var(--sans) !important;
+      font-size: 0.72rem !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.12em !important;
+      text-transform: uppercase !important;
+      background: var(--accent) !important;
+      color: #1A1A1A !important;
+      border: none !important;
+      border-radius: 3px !important;
+      padding: 0.5rem 1.2rem !important;
+      width: 100% !important;
+      transition: 0.2s;
+    }
+    .stButton > button:hover {
+      background: var(--accent2) !important;
+    }
+    .result-prob {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 1rem 1.2rem;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    .prob-number {
+      font-family: var(--serif);
+      font-size: 3rem;
+      font-weight: 400;
+      color: var(--ink);
+      line-height: 1;
+    }
+    .factor-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .factor-name { flex: 2; font-size: 0.75rem; font-weight: 500; color: var(--ink2); }
+    .factor-bar { flex: 3; height: 4px; background: #3D3D3D; border-radius: 2px; overflow: hidden; margin: 0 0.8rem; }
+    .factor-bar-fill { height: 100%; border-radius: 2px; }
+    .factor-pct { width: 40px; text-align: right; font-size: 0.7rem; font-weight: 600; }
+    .factor-dir { width: 22px; text-align: center; font-weight: 700; font-size: 0.7rem; }
+    .pos-fill { background: var(--pos); }
+    .neg-fill { background: var(--neg); }
+    .pos-dir { color: var(--pos); }
+    .neg-dir { color: var(--neg); }
+    .legend {
+      display: flex;
+      gap: 1rem;
+      margin-top: 0.6rem;
+      padding-top: 0.4rem;
+      font-size: 0.62rem;
+      color: var(--ink3);
+      border-top: 1px solid var(--border);
+    }
+    .legend-dot { width: 6px; height: 6px; border-radius: 1px; display: inline-block; margin-right: 0.3rem; }
+    </style>
+    """
 
-/* RESULT BLOCK (kontras terang) */
-.result-prob {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1rem 1.2rem;
-  margin-top: 0.5rem;
-  text-align: center;
-}
-.prob-number {
-  font-family: var(--serif);
-  font-size: 3rem;
-  font-weight: 400;
-  color: var(--ink);
-  line-height: 1;
-}
-
-/* FACTOR TABLE */
-.factor-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.4rem 0;
-  border-bottom: 1px solid var(--border);
-}
-.factor-name { flex: 2; font-size: 0.75rem; font-weight: 500; color: var(--ink2); }
-.factor-bar { flex: 3; height: 4px; background: #EDE6D8; border-radius: 2px; overflow: hidden; margin: 0 0.8rem; }
-.factor-bar-fill { height: 100%; border-radius: 2px; }
-.factor-pct { width: 40px; text-align: right; font-size: 0.7rem; font-weight: 600; }
-.factor-dir { width: 22px; text-align: center; font-weight: 700; font-size: 0.7rem; }
-.pos-fill { background: var(--pos); }
-.neg-fill { background: var(--neg); }
-.pos-dir { color: var(--pos); }
-.neg-dir { color: var(--neg); }
-
-.legend {
-  display: flex;
-  gap: 1rem;
-  margin-top: 0.6rem;
-  padding-top: 0.4rem;
-  font-size: 0.62rem;
-  color: var(--ink3);
-  border-top: 1px solid var(--border);
-}
-.legend-dot { width: 6px; height: 6px; border-radius: 1px; display: inline-block; margin-right: 0.3rem; }
-</style>
-""", unsafe_allow_html=True)
+st.markdown(theme_css, unsafe_allow_html=True)
 
 # ========================
 # Constants
@@ -268,22 +448,29 @@ def compute_contributions(df_input):
     return out.reset_index(drop=True)
 
 # ========================
-# Header
+# Header with theme toggle
 # ========================
-st.markdown("""
-<div class="app-masthead">
-  <div class="masthead-left">
-    <div class="masthead-eyebrow">Academic Risk Assessment</div>
-    <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
-  </div>
-  <div class="masthead-right">
-    <div class="masthead-sub">
-      Logistic regression model trained on behavioural and academic data.
-      Results are probabilistic estimates to support advising.
+theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
+col_h1, col_h2 = st.columns([4, 1])
+with col_h1:
+    st.markdown("""
+    <div class="app-masthead">
+      <div class="masthead-left">
+        <div class="masthead-eyebrow">Academic Risk Assessment</div>
+        <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
+      </div>
+      <div class="masthead-right">
+        <div class="masthead-sub">
+          Logistic regression model trained on behavioural and academic data.
+          Results are probabilistic estimates to support advising.
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-""", unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
+
+with col_h2:
+    st.button(theme_icon, on_click=toggle_theme, key="theme_btn",
+              help="Switch to dark/light mode")
 
 # ========================
 # INPUT FORM
@@ -302,14 +489,12 @@ with col_right:
     travel = st.slider("Travel Time (Minutes)", 0, 180, 30, 5)
     internet = st.selectbox("Internet Access", ["Yes", "No"])
 
-# Baris 2: Stress dan Semester sejajar
 stress_col, semester_col = st.columns(2, gap="large")
 with stress_col:
     stress = st.slider("Stress Index", 0.0, 10.0, 5.0, 0.1)
 with semester_col:
     semester = st.selectbox("Semester", ["Year 1","Year 2","Year 3","Year 4"])
 
-# Baris 3: Part-Time Job dan Scholarship
 pt_col, sch_col = st.columns(2, gap="large")
 with pt_col:
     part_time = st.selectbox("Part-Time Job", ["No", "Yes"])
@@ -337,12 +522,11 @@ if predict:
         "Semester":              semester,
     }])[INPUT_COLS]
 
-    proba = model.predict_proba(df_in)[0][1]  # dropout probability
+    proba = model.predict_proba(df_in)[0][1]
     contrib_df = compute_contributions(df_in)
 
     st.markdown('<div class="sec-label">Prediction Result</div>', unsafe_allow_html=True)
 
-    # Hanya tampilkan probabilitas dropout
     st.markdown(f"""
     <div class="result-prob">
       <div style="font-size:0.65rem; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.2rem;">Dropout Probability</div>
@@ -350,7 +534,6 @@ if predict:
     </div>
     """, unsafe_allow_html=True)
 
-    # Tabel faktor kontribusi
     st.markdown("""
     <div style="margin-top:1.2rem;">
       <div style="font-size:0.65rem; font-weight:600; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.8rem;">TOP 10 INFLUENCING FACTORS</div>
