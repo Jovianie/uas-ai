@@ -68,7 +68,11 @@ if st.session_state.theme == "light":
       border-radius: 6px;
       padding: 1.2rem 1.8rem;
       margin-bottom: 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+    .masthead-left { flex: 1; }
     .masthead-eyebrow {
       font-family: var(--sans);
       font-size: 0.68rem;
@@ -93,6 +97,19 @@ if st.session_state.theme == "light":
       font-weight: 300;
       max-width: 300px;
       margin-top: 0.3rem;
+    }
+    .masthead-theme button {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(250,246,239,0.3);
+      border-radius: 30px;
+      padding: 0.3rem 0.8rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #FAF6EF;
+    }
+    .masthead-theme button:hover {
+      background: rgba(255,255,255,0.2);
     }
     .sec-label {
       font-family: var(--sans);
@@ -226,6 +243,9 @@ else:
       border-radius: 6px;
       padding: 1.2rem 1.8rem;
       margin-bottom: 1.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .masthead-eyebrow {
       font-family: var(--sans);
@@ -251,6 +271,19 @@ else:
       font-weight: 300;
       max-width: 300px;
       margin-top: 0.3rem;
+    }
+    .masthead-theme button {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 30px;
+      padding: 0.3rem 0.8rem;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      color: var(--ink);
+    }
+    .masthead-theme button:hover {
+      background: rgba(255,255,255,0.15);
     }
     .sec-label {
       font-family: var(--sans);
@@ -421,11 +454,39 @@ def compute_contributions(df_input):
     return out.reset_index(drop=True)
 
 # ========================
-# Header with theme toggle (using columns inside masthead)
+# Header with theme toggle
 # ========================
+theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
+
+st.markdown(f"""
+<div class="app-masthead">
+  <div class="masthead-left">
+    <div class="masthead-eyebrow">Academic Risk Assessment</div>
+    <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
+    <div class="masthead-sub">
+      Logistic regression model trained on behavioural and academic data.
+      Results are probabilistic estimates to support advising.
+    </div>
+  </div>
+  <div class="masthead-theme">
+    <button onclick="location.reload();" style="background: transparent; border: none; cursor: pointer;">{theme_icon}</button>
+  </div>
+</div>
+""", unsafe_allow_html=True)
+
+# Karena tombol HTML biasa tidak bisa memanggil fungsi Python, kita tetap gunakan st.button di bawah
+# Tapi kita letakkan di kolom terpisah dengan layout yang sudah diatur.
+# Untuk menghindari reload halaman dengan onclick, kita gunakan st.button yang sudah ada.
+# Kita hapus tombol HTML di atas dan ganti dengan st.button di kolom.
+
+# Lebih baik kita gunakan pendekatan sebelumnya dengan st.columns tapi perbaiki CSS agar tidak merusak.
+# Saya akan kembalikan ke penggunaan st.columns tapi dengan CSS yang sudah diperbaiki.
+
+# Mari kita gunakan st.columns di dalam div app-masthead agar tidak merusak flex.
+
 st.markdown('<div class="app-masthead">', unsafe_allow_html=True)
-col_title, col_theme = st.columns([5, 1])
-with col_title:
+col1, col2 = st.columns([5, 1])
+with col1:
     st.markdown("""
     <div>
       <div class="masthead-eyebrow">Academic Risk Assessment</div>
@@ -436,7 +497,7 @@ with col_title:
       </div>
     </div>
     """, unsafe_allow_html=True)
-with col_theme:
+with col2:
     theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
     st.button(theme_icon, on_click=toggle_theme, key="theme_btn", help="Switch theme")
 st.markdown('</div>', unsafe_allow_html=True)
