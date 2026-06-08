@@ -64,15 +64,15 @@ if st.session_state.theme == "light":
       margin: 0 auto !important;
     }
     .app-masthead {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 1.5rem 1.8rem;
       background: var(--ink);
       border-radius: 6px;
-      padding: 1.2rem 1.8rem;
       margin-bottom: 1.8rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
-    .masthead-left { flex: 1; }
+    .masthead-left { z-index: 1; }
     .masthead-eyebrow {
       font-family: var(--sans);
       font-size: 0.68rem;
@@ -90,26 +90,23 @@ if st.session_state.theme == "light":
       line-height: 1.1;
     }
     .masthead-title em { font-style: italic; color: var(--accent2); }
+    .masthead-right { text-align: right; }
     .masthead-sub {
       font-family: var(--sans);
       font-size: 0.7rem;
       color: rgba(250,246,239,0.55);
       font-weight: 300;
-      max-width: 300px;
-      margin-top: 0.3rem;
+      max-width: 250px;
     }
-    .masthead-theme button {
-      background: rgba(255,255,255,0.1);
+    .theme-toggle {
+      background: transparent;
       border: 1px solid rgba(250,246,239,0.3);
-      border-radius: 30px;
-      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
       font-size: 1.1rem;
       cursor: pointer;
       transition: 0.2s;
-      color: #FAF6EF;
-    }
-    .masthead-theme button:hover {
-      background: rgba(255,255,255,0.2);
+      margin-left: 1rem;
     }
     .sec-label {
       font-family: var(--sans);
@@ -238,14 +235,14 @@ else:
       margin: 0 auto !important;
     }
     .app-masthead {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 1.5rem 1.8rem;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 1.2rem 1.8rem;
       margin-bottom: 1.8rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
     }
     .masthead-eyebrow {
       font-family: var(--sans);
@@ -269,21 +266,18 @@ else:
       font-size: 0.7rem;
       color: var(--ink3);
       font-weight: 300;
-      max-width: 300px;
-      margin-top: 0.3rem;
+      max-width: 250px;
     }
-    .masthead-theme button {
-      background: rgba(255,255,255,0.08);
+    .theme-toggle {
+      background: transparent;
       border: 1px solid var(--border);
-      border-radius: 30px;
-      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      padding: 0.2rem 0.6rem;
       font-size: 1.1rem;
       cursor: pointer;
       transition: 0.2s;
+      margin-left: 1rem;
       color: var(--ink);
-    }
-    .masthead-theme button:hover {
-      background: rgba(255,255,255,0.15);
     }
     .sec-label {
       font-family: var(--sans);
@@ -454,25 +448,29 @@ def compute_contributions(df_input):
     return out.reset_index(drop=True)
 
 # ========================
-# Header dengan theme toggle (hanya SATU)
+# Header with theme toggle
 # ========================
-st.markdown('<div class="app-masthead">', unsafe_allow_html=True)
-col1, col2 = st.columns([5, 1])
-with col1:
+theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
+col_h1, col_h2 = st.columns([4, 1])
+with col_h1:
     st.markdown("""
-    <div>
-      <div class="masthead-eyebrow">Academic Risk Assessment</div>
-      <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
-      <div class="masthead-sub">
-        Logistic regression model trained on behavioural and academic data.
-        Results are probabilistic estimates to support advising.
+    <div class="app-masthead">
+      <div class="masthead-left">
+        <div class="masthead-eyebrow">Academic Risk Assessment</div>
+        <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
+      </div>
+      <div class="masthead-right">
+        <div class="masthead-sub">
+          Logistic regression model trained on behavioural and academic data.
+          Results are probabilistic estimates to support advising.
+        </div>
       </div>
     </div>
     """, unsafe_allow_html=True)
-with col2:
-    theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
-    st.button(theme_icon, on_click=toggle_theme, key="theme_btn", help="Switch theme")
-st.markdown('</div>', unsafe_allow_html=True)
+
+with col_h2:
+    st.button(theme_icon, on_click=toggle_theme, key="theme_btn",
+              help="Switch to dark/light mode")
 
 # ========================
 # INPUT FORM
