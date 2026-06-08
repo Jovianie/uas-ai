@@ -15,13 +15,17 @@ st.set_page_config(
 )
 
 # ========================
-# CSS (lebih interaktif & rapi)
+# CSS (diperbaiki)
 # ========================
 st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300;1,9..40,400&display=swap');
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 :root {
   --bg:        #F4EFE6;
@@ -48,33 +52,35 @@ html, body, [class*="css"], .stApp {
 }
 
 #MainMenu, footer, header { visibility: hidden; }
-.block-container { padding: 2rem 2rem 3rem !important; max-width: 1200px !important; margin: 0 auto; }
+.block-container {
+  padding: 1.5rem 2rem 2rem !important;
+  max-width: 1200px !important;
+  margin: 0 auto !important;
+}
 
-/* ── HEADER ── */
+/* HEADER */
 .app-masthead {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  padding: 2rem 2rem;
+  padding: 1.5rem 1.8rem;
   background: var(--ink);
   border-radius: 6px;
-  margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
+  margin-bottom: 1.8rem;
 }
-.masthead-left { position: relative; z-index: 1; }
+.masthead-left { z-index: 1; }
 .masthead-eyebrow {
   font-family: var(--sans);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 500;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent2);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 .masthead-title {
   font-family: var(--serif);
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 400;
   color: #FAF6EF;
   line-height: 1.1;
@@ -83,43 +89,33 @@ html, body, [class*="css"], .stApp {
 .masthead-right { text-align: right; }
 .masthead-sub {
   font-family: var(--sans);
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: rgba(250,246,239,0.55);
   font-weight: 300;
-  max-width: 280px;
+  max-width: 250px;
 }
 
-/* ── SECTION LABEL ── */
+/* SECTION LABEL */
 .sec-label {
   font-family: var(--sans);
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--ink3);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
+  padding-bottom: 0.4rem;
   border-bottom: 1px solid var(--border);
 }
 
-/* ── PANEL INPUT ── */
-.input-grid {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  padding: 1.5rem 1.8rem;
-  margin-bottom: 2rem;
-}
-
-/* ── SLIDER & SELECTBOX ── */
+/* SLIDER & SELECTBOX */
 div[data-testid="stSlider"] > label,
-div[data-testid="stSelectbox"] > label,
-div[data-testid="stNumberInput"] > label {
+div[data-testid="stSelectbox"] > label {
   font-family: var(--sans) !important;
-  font-size: 0.8rem !important;
+  font-size: 0.72rem !important;
   font-weight: 500 !important;
   color: var(--ink2) !important;
-  margin-bottom: 0.3rem !important;
+  margin-bottom: 0.2rem !important;
 }
 div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
   color: var(--accent) !important;
@@ -128,12 +124,14 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
   border-color: var(--border) !important;
   border-radius: 3px !important;
   background: var(--surface) !important;
+  font-family: var(--sans) !important;
+  font-size: 0.78rem !important;
 }
 
-/* ── BUTTON ── */
+/* BUTTON */
 .stButton > button {
   font-family: var(--sans) !important;
-  font-size: 0.8rem !important;
+  font-size: 0.72rem !important;
   font-weight: 600 !important;
   letter-spacing: 0.12em !important;
   text-transform: uppercase !important;
@@ -141,7 +139,7 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
   color: #FAF6EF !important;
   border: none !important;
   border-radius: 3px !important;
-  padding: 0.7rem 1.5rem !important;
+  padding: 0.5rem 1.2rem !important;
   width: 100% !important;
   transition: 0.2s;
 }
@@ -149,17 +147,17 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
   background: var(--accent) !important;
 }
 
-/* ── RESULT BLOCK ── */
-.result-block {
+/* RESULT BLOCK */
+.result-prob {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 4px;
-  padding: 1.5rem 1.8rem;
-  margin-top: 1rem;
+  padding: 1rem 1.2rem;
+  margin-top: 0.5rem;
 }
 .prob-number {
   font-family: var(--serif);
-  font-size: 3.5rem;
+  font-size: 2.8rem;
   font-weight: 400;
   color: var(--ink);
   line-height: 1;
@@ -167,32 +165,28 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
 .risk-badge {
   display: inline-block;
   font-family: var(--sans);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  padding: 0.4rem 1.2rem;
+  padding: 0.3rem 0.9rem;
   border-radius: 2px;
 }
 .risk-low  { background: #E8F2EC; color: var(--risk-low); border: 1px solid #B8D9C4; }
 .risk-med  { background: #F5EDD5; color: var(--risk-mid); border: 1px solid #DFC98A; }
 .risk-hi   { background: #F2E4E3; color: var(--risk-hi); border: 1px solid #D9A8A6; }
 
-/* ── FACTOR TABLE ── */
-.factor-table {
-  width: 100%;
-  margin-top: 1rem;
-}
+/* FACTOR TABLE */
 .factor-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.5rem 0;
+  padding: 0.4rem 0;
   border-bottom: 1px solid var(--border);
 }
-.factor-name { flex: 2; font-size: 0.85rem; font-weight: 500; color: var(--ink2); }
-.factor-bar { flex: 3; height: 6px; background: #EDE6D8; border-radius: 3px; overflow: hidden; margin: 0 1rem; }
-.factor-bar-fill { height: 100%; border-radius: 3px; }
-.factor-pct { width: 45px; text-align: right; font-size: 0.8rem; font-weight: 600; }
-.factor-dir { width: 25px; text-align: center; font-weight: 700; }
+.factor-name { flex: 2; font-size: 0.75rem; font-weight: 500; color: var(--ink2); }
+.factor-bar { flex: 3; height: 4px; background: #EDE6D8; border-radius: 2px; overflow: hidden; margin: 0 0.8rem; }
+.factor-bar-fill { height: 100%; border-radius: 2px; }
+.factor-pct { width: 40px; text-align: right; font-size: 0.7rem; font-weight: 600; }
+.factor-dir { width: 22px; text-align: center; font-weight: 700; font-size: 0.7rem; }
 .pos-fill { background: var(--pos); }
 .neg-fill { background: var(--neg); }
 .pos-dir { color: var(--pos); }
@@ -201,13 +195,13 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
 .legend {
   display: flex;
   gap: 1rem;
-  margin-top: 1rem;
-  padding-top: 0.5rem;
-  font-size: 0.7rem;
+  margin-top: 0.6rem;
+  padding-top: 0.4rem;
+  font-size: 0.62rem;
   color: var(--ink3);
   border-top: 1px solid var(--border);
 }
-.legend-dot { width: 8px; height: 8px; border-radius: 1px; display: inline-block; margin-right: 0.3rem; }
+.legend-dot { width: 6px; height: 6px; border-radius: 1px; display: inline-block; margin-right: 0.3rem; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -310,28 +304,36 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========================
-# INPUT FORM (DUA KOLOM)
+# INPUT FORM (DUA KOLOM SEIMBANG)
 # ========================
 st.markdown('<div class="sec-label">Student Profile</div>', unsafe_allow_html=True)
-with st.container():
-    col1, col2 = st.columns(2)
-    with col1:
-        gpa = st.slider("GPA", 0.0, 4.0, 2.8, 0.05)
-        attendance = st.slider("Attendance Rate (%)", 0.0, 100.0, 75.0, 0.5)
-        study_hours = st.slider("Study Hours per Day", 0.0, 12.0, 3.0, 0.25)
-        stress = st.slider("Stress Index", 0.0, 10.0, 5.0, 0.1)
-    with col2:
-        delay_days = st.slider("Assignment Delay (Days)", 0, 30, 3, 1)
-        travel = st.slider("Travel Time (Minutes)", 0, 180, 30, 5)
-        internet = st.selectbox("Internet Access", ["Yes", "No"])
-        part_time = st.selectbox("Part-Time Job", ["No", "Yes"])
-        scholarship = st.selectbox("Scholarship", ["No", "Yes"])
-        semester = st.selectbox("Semester", ["Year 1","Year 2","Year 3","Year 4"])
 
-    # Tombol prediksi di tengah
-    _, btn_col, _ = st.columns([1, 2, 1])
-    with btn_col:
-        predict = st.button("Run Prediction", use_container_width=True)
+# Seimbangkan jumlah item di kiri dan kanan (4 vs 4)
+col_left, col_right = st.columns(2, gap="large")
+
+with col_left:
+    gpa = st.slider("GPA", 0.0, 4.0, 2.8, 0.05)
+    attendance = st.slider("Attendance Rate (%)", 0.0, 100.0, 75.0, 0.5)
+    study_hours = st.slider("Study Hours per Day", 0.0, 12.0, 3.0, 0.25)
+    stress = st.slider("Stress Index", 0.0, 10.0, 5.0, 0.1)
+
+with col_right:
+    delay_days = st.slider("Assignment Delay (Days)", 0, 30, 3, 1)
+    travel = st.slider("Travel Time (Minutes)", 0, 180, 30, 5)
+    internet = st.selectbox("Internet Access", ["Yes", "No"])
+    semester = st.selectbox("Semester", ["Year 1","Year 2","Year 3","Year 4"])
+
+# Baris tambahan untuk dua selectbox lainnya agar tetap seimbang
+col_extra1, col_extra2 = st.columns(2, gap="large")
+with col_extra1:
+    part_time = st.selectbox("Part-Time Job", ["No", "Yes"])
+with col_extra2:
+    scholarship = st.selectbox("Scholarship", ["No", "Yes"])
+
+# Tombol prediksi di tengah
+_, btn_col, _ = st.columns([1, 2, 1])
+with btn_col:
+    predict = st.button("Run Prediction", use_container_width=True)
 
 # ========================
 # HASIL (ditampilkan setelah predict)
@@ -355,51 +357,51 @@ if predict:
     contrib_df = compute_contributions(df_in)
 
     st.markdown('<div class="sec-label">Prediction Result</div>', unsafe_allow_html=True)
-    with st.container():
-        # Baris atas: probabilitas + risk badge
-        colA, colB = st.columns([2, 1])
-        with colA:
-            st.markdown(f"""
-            <div class="result-block" style="background:var(--ink); color:#FAF6EF;">
-              <div style="font-size:0.7rem; letter-spacing:0.15em; opacity:0.6;">Dropout Probability</div>
-              <div class="prob-number">{proba*100:.1f}%</div>
-            </div>
-            """, unsafe_allow_html=True)
-        with colB:
-            st.markdown(f"""
-            <div class="result-block" style="text-align:center;">
-              <div style="font-size:0.7rem; letter-spacing:0.15em; opacity:0.6;">Risk Level</div>
-              <div class="risk-badge {cls}" style="margin-top:0.5rem;">{label}</div>
-            </div>
-            """, unsafe_allow_html=True)
-
-        # Tabel faktor kontribusi
-        st.markdown("""
-        <div style="margin-top:1.5rem;">
-          <div style="font-size:0.7rem; font-weight:600; letter-spacing:0.15em; margin-bottom:1rem;">TOP 10 INFLUENCING FACTORS</div>
+    
+    # Gunakan columns untuk hasil (probabilitas dan risk badge)
+    colA, colB = st.columns([2, 1], gap="medium")
+    with colA:
+        st.markdown(f"""
+        <div class="result-prob">
+          <div style="font-size:0.65rem; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.2rem;">Dropout Probability</div>
+          <div class="prob-number">{proba*100:.1f}%</div>
+        </div>
+        """, unsafe_allow_html=True)
+    with colB:
+        st.markdown(f"""
+        <div class="result-prob" style="text-align:center;">
+          <div style="font-size:0.65rem; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.2rem;">Risk Level</div>
+          <div class="risk-badge {cls}" style="margin-top:0.2rem;">{label}</div>
         </div>
         """, unsafe_allow_html=True)
 
-        for _, row in contrib_df.iterrows():
-            bar_cls = "pos-fill" if row["dir"] == "+" else "neg-fill"
-            dir_cls = "pos-dir" if row["dir"] == "+" else "neg-dir"
-            st.markdown(f"""
-            <div class="factor-row">
-              <span class="factor-name">{row['label']}</span>
-              <div class="factor-bar">
-                <div class="factor-bar-fill {bar_cls}" style="width:{row['pct']}%"></div>
-              </div>
-              <span class="factor-pct">{row['pct']}%</span>
-              <span class="factor-dir {dir_cls}">{row['dir']}</span>
-            </div>
-            """, unsafe_allow_html=True)
+    # Tabel faktor kontribusi
+    st.markdown("""
+    <div style="margin-top:1.2rem;">
+      <div style="font-size:0.65rem; font-weight:600; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.8rem;">TOP 10 INFLUENCING FACTORS</div>
+    </div>
+    """, unsafe_allow_html=True)
 
-        st.markdown("""
-        <div class="legend">
-          <div><span class="legend-dot" style="background:var(--pos);"></span> Increases dropout risk</div>
-          <div><span class="legend-dot" style="background:var(--neg);"></span> Decreases dropout risk</div>
+    for _, row in contrib_df.iterrows():
+        bar_cls = "pos-fill" if row["dir"] == "+" else "neg-fill"
+        dir_cls = "pos-dir" if row["dir"] == "+" else "neg-dir"
+        st.markdown(f"""
+        <div class="factor-row">
+          <span class="factor-name">{row['label']}</span>
+          <div class="factor-bar">
+            <div class="factor-bar-fill {bar_cls}" style="width:{row['pct']}%"></div>
+          </div>
+          <span class="factor-pct">{row['pct']}%</span>
+          <span class="factor-dir {dir_cls}">{row['dir']}</span>
         </div>
         """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="legend">
+      <div><span class="legend-dot" style="background:var(--pos);"></span> Increases dropout risk</div>
+      <div><span class="legend-dot" style="background:var(--neg);"></span> Decreases dropout risk</div>
+    </div>
+    """, unsafe_allow_html=True)
 else:
-    # Tidak ada placeholder kosong – hanya biarkan kosong
+    # Tidak menampilkan apa pun jika belum predict
     pass
