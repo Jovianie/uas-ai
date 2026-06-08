@@ -454,36 +454,8 @@ def compute_contributions(df_input):
     return out.reset_index(drop=True)
 
 # ========================
-# Header with theme toggle
+# Header dengan theme toggle (hanya SATU)
 # ========================
-theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
-
-st.markdown(f"""
-<div class="app-masthead">
-  <div class="masthead-left">
-    <div class="masthead-eyebrow">Academic Risk Assessment</div>
-    <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
-    <div class="masthead-sub">
-      Logistic regression model trained on behavioural and academic data.
-      Results are probabilistic estimates to support advising.
-    </div>
-  </div>
-  <div class="masthead-theme">
-    <button onclick="location.reload();" style="background: transparent; border: none; cursor: pointer;">{theme_icon}</button>
-  </div>
-</div>
-""", unsafe_allow_html=True)
-
-# Karena tombol HTML biasa tidak bisa memanggil fungsi Python, kita tetap gunakan st.button di bawah
-# Tapi kita letakkan di kolom terpisah dengan layout yang sudah diatur.
-# Untuk menghindari reload halaman dengan onclick, kita gunakan st.button yang sudah ada.
-# Kita hapus tombol HTML di atas dan ganti dengan st.button di kolom.
-
-# Lebih baik kita gunakan pendekatan sebelumnya dengan st.columns tapi perbaiki CSS agar tidak merusak.
-# Saya akan kembalikan ke penggunaan st.columns tapi dengan CSS yang sudah diperbaiki.
-
-# Mari kita gunakan st.columns di dalam div app-masthead agar tidak merusak flex.
-
 st.markdown('<div class="app-masthead">', unsafe_allow_html=True)
 col1, col2 = st.columns([5, 1])
 with col1:
