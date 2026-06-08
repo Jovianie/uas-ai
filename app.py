@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # ========================
-# CSS (diperbaiki)
+# CSS (diperbaiki kontras & font)
 # ========================
 st.markdown("""
 <style>
@@ -147,7 +147,7 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
   background: var(--accent) !important;
 }
 
-/* RESULT BLOCK */
+/* RESULT BLOCK (kontras terang) */
 .result-prob {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -304,30 +304,35 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========================
-# INPUT FORM (DUA KOLOM SEIMBANG)
+# INPUT FORM (Stress & Semester sejajar)
 # ========================
 st.markdown('<div class="sec-label">Student Profile</div>', unsafe_allow_html=True)
 
-# Seimbangkan jumlah item di kiri dan kanan (4 vs 4)
+# Baris 1: GPA, Attendance, Study Hours (kiri) vs Delay, Travel, Internet (kanan)
 col_left, col_right = st.columns(2, gap="large")
 
 with col_left:
     gpa = st.slider("GPA", 0.0, 4.0, 2.8, 0.05)
     attendance = st.slider("Attendance Rate (%)", 0.0, 100.0, 75.0, 0.5)
     study_hours = st.slider("Study Hours per Day", 0.0, 12.0, 3.0, 0.25)
-    stress = st.slider("Stress Index", 0.0, 10.0, 5.0, 0.1)
 
 with col_right:
     delay_days = st.slider("Assignment Delay (Days)", 0, 30, 3, 1)
     travel = st.slider("Travel Time (Minutes)", 0, 180, 30, 5)
     internet = st.selectbox("Internet Access", ["Yes", "No"])
+
+# Baris 2: Stress (kiri) dan Semester (kanan) – SEJAJAR HORIZONTAL
+stress_col, semester_col = st.columns(2, gap="large")
+with stress_col:
+    stress = st.slider("Stress Index", 0.0, 10.0, 5.0, 0.1)
+with semester_col:
     semester = st.selectbox("Semester", ["Year 1","Year 2","Year 3","Year 4"])
 
-# Baris tambahan untuk dua selectbox lainnya agar tetap seimbang
-col_extra1, col_extra2 = st.columns(2, gap="large")
-with col_extra1:
+# Baris 3: Part-Time Job dan Scholarship (dua kolom)
+pt_col, sch_col = st.columns(2, gap="large")
+with pt_col:
     part_time = st.selectbox("Part-Time Job", ["No", "Yes"])
-with col_extra2:
+with sch_col:
     scholarship = st.selectbox("Scholarship", ["No", "Yes"])
 
 # Tombol prediksi di tengah
@@ -403,5 +408,4 @@ if predict:
     </div>
     """, unsafe_allow_html=True)
 else:
-    # Tidak menampilkan apa pun jika belum predict
     pass
