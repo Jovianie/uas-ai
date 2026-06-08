@@ -15,7 +15,7 @@ st.set_page_config(
 )
 
 # ========================
-# CSS (diperbaiki kontras & font)
+# CSS
 # ========================
 st.markdown("""
 <style>
@@ -36,9 +36,6 @@ st.markdown("""
   --ink:       #1E1712;
   --ink2:      #4A3F32;
   --ink3:      #8B7B66;
-  --risk-low:  #3D6E55;
-  --risk-mid:  #9C7A2A;
-  --risk-hi:   #8C3A35;
   --pos:       #8C3A35;
   --neg:       #3D6E55;
   --serif:     'DM Serif Display', Georgia, serif;
@@ -154,25 +151,15 @@ div[data-testid="stSlider"] .st-emotion-cache-1dp5vir {
   border-radius: 4px;
   padding: 1rem 1.2rem;
   margin-top: 0.5rem;
+  text-align: center;
 }
 .prob-number {
   font-family: var(--serif);
-  font-size: 2.8rem;
+  font-size: 3rem;
   font-weight: 400;
   color: var(--ink);
   line-height: 1;
 }
-.risk-badge {
-  display: inline-block;
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 600;
-  padding: 0.3rem 0.9rem;
-  border-radius: 2px;
-}
-.risk-low  { background: #E8F2EC; color: var(--risk-low); border: 1px solid #B8D9C4; }
-.risk-med  { background: #F5EDD5; color: var(--risk-mid); border: 1px solid #DFC98A; }
-.risk-hi   { background: #F2E4E3; color: var(--risk-hi); border: 1px solid #D9A8A6; }
 
 /* FACTOR TABLE */
 .factor-row {
@@ -262,11 +249,6 @@ def get_all_feature_names():
 def friendly(raw):
     return OHE_LABELS.get(raw, NUM_LABELS.get(raw, raw.replace("_", " ")))
 
-def classify_risk(p):
-    if p < 0.35:   return "Low Risk",    "risk-low"
-    if p < 0.65:   return "Medium Risk", "risk-med"
-    return              "High Risk",   "risk-hi"
-
 def compute_contributions(df_input):
     prep   = model.named_steps["preprocessor"]
     lr     = model.named_steps["model"]
@@ -304,11 +286,10 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ========================
-# INPUT FORM (Stress & Semester sejajar)
+# INPUT FORM
 # ========================
 st.markdown('<div class="sec-label">Student Profile</div>', unsafe_allow_html=True)
 
-# Baris 1: GPA, Attendance, Study Hours (kiri) vs Delay, Travel, Internet (kanan)
 col_left, col_right = st.columns(2, gap="large")
 
 with col_left:
@@ -321,27 +302,26 @@ with col_right:
     travel = st.slider("Travel Time (Minutes)", 0, 180, 30, 5)
     internet = st.selectbox("Internet Access", ["Yes", "No"])
 
-# Baris 2: Stress (kiri) dan Semester (kanan) – SEJAJAR HORIZONTAL
+# Baris 2: Stress dan Semester sejajar
 stress_col, semester_col = st.columns(2, gap="large")
 with stress_col:
     stress = st.slider("Stress Index", 0.0, 10.0, 5.0, 0.1)
 with semester_col:
     semester = st.selectbox("Semester", ["Year 1","Year 2","Year 3","Year 4"])
 
-# Baris 3: Part-Time Job dan Scholarship (dua kolom)
+# Baris 3: Part-Time Job dan Scholarship
 pt_col, sch_col = st.columns(2, gap="large")
 with pt_col:
     part_time = st.selectbox("Part-Time Job", ["No", "Yes"])
 with sch_col:
     scholarship = st.selectbox("Scholarship", ["No", "Yes"])
 
-# Tombol prediksi di tengah
 _, btn_col, _ = st.columns([1, 2, 1])
 with btn_col:
     predict = st.button("Run Prediction", use_container_width=True)
 
 # ========================
-# HASIL (ditampilkan setelah predict)
+# HASIL
 # ========================
 if predict:
     df_in = pd.DataFrame([{
@@ -357,28 +337,18 @@ if predict:
         "Semester":              semester,
     }])[INPUT_COLS]
 
-    proba = model.predict_proba(df_in)[0][1]
-    label, cls = classify_risk(proba)
+    proba = model.predict_proba(df_in)[0][1]  # dropout probability
     contrib_df = compute_contributions(df_in)
 
     st.markdown('<div class="sec-label">Prediction Result</div>', unsafe_allow_html=True)
-    
-    # Gunakan columns untuk hasil (probabilitas dan risk badge)
-    colA, colB = st.columns([2, 1], gap="medium")
-    with colA:
-        st.markdown(f"""
-        <div class="result-prob">
-          <div style="font-size:0.65rem; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.2rem;">Dropout Probability</div>
-          <div class="prob-number">{proba*100:.1f}%</div>
-        </div>
-        """, unsafe_allow_html=True)
-    with colB:
-        st.markdown(f"""
-        <div class="result-prob" style="text-align:center;">
-          <div style="font-size:0.65rem; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.2rem;">Risk Level</div>
-          <div class="risk-badge {cls}" style="margin-top:0.2rem;">{label}</div>
-        </div>
-        """, unsafe_allow_html=True)
+
+    # Hanya tampilkan probabilitas dropout
+    st.markdown(f"""
+    <div class="result-prob">
+      <div style="font-size:0.65rem; letter-spacing:0.15em; color:var(--ink3); margin-bottom:0.2rem;">Dropout Probability</div>
+      <div class="prob-number">{proba*100:.1f}%</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Tabel faktor kontribusi
     st.markdown("""
