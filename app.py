@@ -63,16 +63,30 @@ if st.session_state.theme == "light":
       max-width: 1200px !important;
       margin: 0 auto !important;
     }
-    .app-masthead {
+
+    /* Unified header container - spans full width inside block-container */
+    .custom-header {
+      background: var(--ink);
+      border-radius: 6px;
+      margin-bottom: 1.8rem;
       display: flex;
       align-items: flex-end;
       justify-content: space-between;
       padding: 1.5rem 1.8rem;
-      background: var(--ink);
-      border-radius: 6px;
-      margin-bottom: 1.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
-    .masthead-left { z-index: 1; }
+    .header-left {
+      flex: 3;
+    }
+    .header-right {
+      flex: 1;
+      text-align: right;
+      min-width: 140px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+    }
     .masthead-eyebrow {
       font-family: var(--sans);
       font-size: 0.68rem;
@@ -90,24 +104,37 @@ if st.session_state.theme == "light":
       line-height: 1.1;
     }
     .masthead-title em { font-style: italic; color: var(--accent2); }
-    .masthead-right { text-align: right; }
     .masthead-sub {
       font-family: var(--sans);
       font-size: 0.7rem;
       color: rgba(250,246,239,0.55);
       font-weight: 300;
-      max-width: 250px;
+      max-width: 280px;
+      margin-top: 0.2rem;
     }
-    .theme-toggle {
+
+    /* Theme toggle button (Streamlit widget) styling */
+    .header-right div[data-testid="stButton"] button {
       background: transparent;
       border: 1px solid rgba(250,246,239,0.3);
       border-radius: 20px;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.8rem;
       font-size: 1.1rem;
       cursor: pointer;
       transition: 0.2s;
-      margin-left: 1rem;
+      margin: 0;
+      color: #FAF6EF;
+      background: transparent;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: normal;
+      width: auto;
     }
+    .header-right div[data-testid="stButton"] button:hover {
+      background: rgba(250,246,239,0.1);
+      border-color: var(--accent2);
+    }
+
     .sec-label {
       font-family: var(--sans);
       font-size: 0.68rem;
@@ -234,15 +261,30 @@ else:
       max-width: 1200px !important;
       margin: 0 auto !important;
     }
-    .app-masthead {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      padding: 1.5rem 1.8rem;
+
+    /* Unified header container */
+    .custom-header {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 6px;
       margin-bottom: 1.8rem;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      padding: 1.5rem 1.8rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .header-left {
+      flex: 3;
+    }
+    .header-right {
+      flex: 1;
+      text-align: right;
+      min-width: 140px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
     }
     .masthead-eyebrow {
       font-family: var(--sans);
@@ -266,19 +308,32 @@ else:
       font-size: 0.7rem;
       color: var(--ink3);
       font-weight: 300;
-      max-width: 250px;
+      max-width: 280px;
+      margin-top: 0.2rem;
     }
-    .theme-toggle {
+
+    /* Theme toggle button (Streamlit widget) styling */
+    .header-right div[data-testid="stButton"] button {
       background: transparent;
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 0.2rem 0.6rem;
+      padding: 0.2rem 0.8rem;
       font-size: 1.1rem;
       cursor: pointer;
       transition: 0.2s;
-      margin-left: 1rem;
+      margin: 0;
       color: var(--ink);
+      background: transparent;
+      text-transform: none;
+      letter-spacing: 0;
+      font-weight: normal;
+      width: auto;
     }
+    .header-right div[data-testid="stButton"] button:hover {
+      background: rgba(255,255,255,0.05);
+      border-color: var(--accent2);
+    }
+
     .sec-label {
       font-family: var(--sans);
       font-size: 0.68rem;
@@ -448,29 +503,34 @@ def compute_contributions(df_input):
     return out.reset_index(drop=True)
 
 # ========================
-# Header with theme toggle
+# Header with theme toggle inside the box
 # ========================
 theme_icon = "🌙" if st.session_state.theme == "light" else "☀️"
-col_h1, col_h2 = st.columns([4, 1])
-with col_h1:
+
+# Create a custom header using two columns inside a flex container
+with st.container():
+    # Left side: title and description
     st.markdown("""
-    <div class="app-masthead">
-      <div class="masthead-left">
+    <div class="custom-header">
+      <div class="header-left">
         <div class="masthead-eyebrow">Academic Risk Assessment</div>
         <div class="masthead-title">Student Dropout<br><em>Predictor</em></div>
-      </div>
-      <div class="masthead-right">
         <div class="masthead-sub">
           Logistic regression model trained on behavioural and academic data.
           Results are probabilistic estimates to support advising.
         </div>
       </div>
-    </div>
+      <div class="header-right">
     """, unsafe_allow_html=True)
-
-with col_h2:
+    
+    # Right side: toggle button (Streamlit widget)
     st.button(theme_icon, on_click=toggle_theme, key="theme_btn",
               help="Switch to dark/light mode")
+    
+    st.markdown("""
+      </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ========================
 # INPUT FORM
@@ -506,7 +566,7 @@ with btn_col:
     predict = st.button("Run Prediction", use_container_width=True)
 
 # ========================
-# HASIL
+# RESULTS
 # ========================
 if predict:
     df_in = pd.DataFrame([{
